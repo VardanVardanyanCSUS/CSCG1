@@ -5,11 +5,13 @@ package collections;
 //import java.io.IOException;
 
 class Movie{
+	private String id;
 	private String title;
 	private String director;
 	private int year;
 	
-	public Movie(String title, String director, int year){
+	public Movie(String id, String title, String director, int year){
+		this.id=id;
 		this.title=title;
 		this.director=director;
 		this.year=year;
@@ -17,10 +19,12 @@ class Movie{
 	
 	//default constructor
 	public Movie(){
-		this("null", "null", -1);
+		this("null", "null", "null", -1);
 	}
 	
 	/******* setters *******/
+	public void setId(String id){ this.id=id; }
+	
 	public void setTitle(String title){
 		this.title=title;
 	}
@@ -34,6 +38,8 @@ class Movie{
 	}
 	
 	/****** getters *****/
+	public String getId() { return this.id; }
+	
 	public String getTitle(){
 		return this.title;
 	}
@@ -47,6 +53,6 @@ class Movie{
 	}
 	
 	public String toString(){
-		return this.title + ", " + this.director + ", " + this.year;
+		return this.id + ". " + this.title + ", " + this.director + ", " + this.year;
 	}
 }
