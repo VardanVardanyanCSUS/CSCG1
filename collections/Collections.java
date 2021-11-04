@@ -4,52 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.io.IOException;
 
-class Movie{
-	private String title;
-	private String director;
-	private int year;
-	
-	public Movie(String title, String director, int year){
-		this.title=title;
-		this.director=director;
-		this.year=year;
-	}
-	
-	//default constructor
-	public Movie(){
-		this("null", "null", -1);
-	}
-	
-	/******* setters *******/
-	public void setTitle(String title){
-		this.title=title;
-	}
-	
-	public void setDirector(String director){
-		this.director=director;
-	}
-	
-	public void setYear(int year){
-		this.year=year;
-	}
-	
-	/****** getters *****/
-	public String getTitle(){
-		return this.title;
-	}
-	
-	public String getDirector(){
-		return this.director;
-	}
-	
-	public int getYear(){
-		return this.year;
-	}
-	
-	public String toString(){
-		return this.title + ", " + this.director + ", " + this.year;
-	}
-}
 
 public class Collections{
 	public static void main (String[] args){
@@ -58,20 +12,23 @@ public class Collections{
 	}
 	
 	public static void run(String filename){
-		LinkedList<Movie> movieList = createList(filename);
+		HashMap<String,Movie> movieList = createList(filename);
 		displayMovieList(movieList);
 		writeToFile(movieList);
 	}
 
-	public static LinkedList<Movie> createList(String filename){
-		LinkedList<Movie> list = new LinkedList<Movie>();
+	public static HashMap<String,Movie> createList(String filename){
+		HashMap<String,Movie> list = new HashMap<String,Movie>();
 		try{
 			Scanner fscan = new Scanner(new File(filename));
+			int id=0; //id and counter for movies 
 			while(fscan.hasNextLine()){
+				id++;
 				Movie newMovie = new Movie();
 				String inline = fscan.nextLine(); //title
 				String tokens[] = inline.split(": ");
 				//tokens[0] is label, tokens[1] is data (title, director, or year)
+				newMovie.setId(Integer.toString(id)); //convert int id to String then set as newMovie's id
 				newMovie.setTitle(tokens[1]);
 			
 				inline = fscan.nextLine();  //director
@@ -82,7 +39,7 @@ public class Collections{
 				tokens = inline.split(": ");
 				newMovie.setYear(Integer.parseInt(tokens[1]));
 				
-				list.add(newMovie);
+				list.put(newMovie.getId(),newMovie);
 				
 			}
 
@@ -95,23 +52,23 @@ public class Collections{
 			System.out.println("File input.txt open error ");
 		}
 		
-		//if succesfull, return list
+		//if succesfully, return list
 		return list;
 	}
 	
-	public static void displayMovieList(LinkedList<Movie> list){
-		for (int i=0; i<list.size(); i++){
-			System.out.println( (i+1) +". " + list.get(i).toString() );
+	public static void displayMovieList(HashMap<String,Movie> list){
+		for (String id: list.keySet()){
+			System.out.println( list.get(id).toString() );
 		}
 		
 	}
 	
-	public static void writeToFile(LinkedList<Movie> list){
+	public static void writeToFile(HashMap<String,Movie> list){
 		try {
 			FileWriter fout = new FileWriter("output.txt");
 			fout.write("Output: \n");
-			for (int i=0; i<list.size(); i++){
-				fout.write( (i+1) +". " + list.get(i).toString()+"\n" );
+			for (String id: list.keySet()){
+				fout.write( list.get(id).toString()+"\n" );
 			} 
 			fout.close();
 			System.out.println("\n Done printing to file");
